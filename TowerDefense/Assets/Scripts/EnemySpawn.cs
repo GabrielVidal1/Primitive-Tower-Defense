@@ -76,7 +76,7 @@ public class EnemySpawn : MonoBehaviour {
 
 				if (isDemo) {
 					enemy.GetComponent<Enemy> ().enemyNexus = DemoTarget.transform;
-					enemy.GetComponent<NavMeshAgent> ().speed *= 2;
+					enemy.GetComponent<UnityEngine.AI.NavMeshAgent> ().speed *= 2;
 					enemy.transform.SetParent (TotalEnemyDemo.transform);
 				}
 

@@ -47,7 +47,7 @@ public class ZoneTurret : MonoBehaviour {
 
 
 						if (slowDownEnemy > 0 && !entity.GetComponent<Enemy> ().slowDown && iceTurret) {
-							entity.GetComponent<NavMeshAgent> ().speed *= slowDownEnemy;
+							entity.GetComponent<UnityEngine.AI.NavMeshAgent> ().speed *= slowDownEnemy;
 							entity.GetComponent<Enemy> ().slowDown = true;
 							GameObject particle = (GameObject)Instantiate (particleAnimation, entity.transform.position, Quaternion.identity);
 							particle.transform.SetParent (entity.transform);

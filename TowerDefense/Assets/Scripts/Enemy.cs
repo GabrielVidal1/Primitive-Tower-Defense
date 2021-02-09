@@ -30,14 +30,14 @@ public class Enemy : MonoBehaviour {
 	private float fireEventTime;
 	public float PoisonEventTime;
 
-	private NavMeshAgent agent;
+	private UnityEngine.AI.NavMeshAgent agent;
     private Transform target;
 
 	private float stunnedTime;
 
 	void Start () 
 	{
-		agent = GetComponent<NavMeshAgent> ();
+		agent = GetComponent<UnityEngine.AI.NavMeshAgent> ();
         GameObject gameManager = GameObject.FindWithTag("GameController");
         GameManager gM = gameManager.GetComponent<GameManager>();
 		enemyNexus = gM.Nexus;
@@ -72,7 +72,7 @@ public class Enemy : MonoBehaviour {
 		} else if (mage) {
 			moneyDropOnDeath *= 4 / 3;
 			mageAttributes.SetActive (true);
-			GetComponent<NavMeshAgent> ().speed *= .8f;
+			GetComponent<UnityEngine.AI.NavMeshAgent> ().speed *= .8f;
 		}
 
 

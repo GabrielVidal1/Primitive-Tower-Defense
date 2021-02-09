@@ -18,7 +18,7 @@ public class Ice : MonoBehaviour {
 		if (Time.time - spawnTime > lifeTime) 
 		{
 			transform.parent.GetComponent<Enemy> ().slowDown = false;
-			transform.parent.GetComponent<NavMeshAgent> ().speed *= (1f/.4f);
+			transform.parent.GetComponent<UnityEngine.AI.NavMeshAgent> ().speed *= (1f/.4f);
 			Destroy (gameObject);
 		}
 
