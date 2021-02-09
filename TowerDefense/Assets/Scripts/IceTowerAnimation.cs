@@ -1,20 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IceTowerAnimation : MonoBehaviour {
+public class IceTowerAnimation : MonoBehaviour
+{
+    public GameObject core;
 
-	public GameObject core;
-	void Start () {
-	
-	}
-	void Update () 
-	{
-		transform.Rotate (0, 60 * Time.deltaTime, 0);
+    void Update()
+    {
+        transform.Rotate(0, 60 * Time.deltaTime, 0);
 
-		core.transform.Rotate (0, -60 * Time.deltaTime, 0);
-
-
-
-
-	}
+        core.transform.Rotate(0, -60 * Time.deltaTime, 0);
+    }
 }

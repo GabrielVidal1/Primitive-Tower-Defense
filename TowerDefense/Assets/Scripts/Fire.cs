@@ -1,28 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Fire : MonoBehaviour {
+public class Fire : MonoBehaviour
+{
+    public float lifeTime;
+    private float spawnTime;
 
-	public float lifeTime;
-	private float spawnTime;
+    void Start()
+    {
+        spawnTime = Time.time;
+    }
 
-	private GameObject MainCam;
+    void Update()
+    {
+        if (Time.time - spawnTime > lifeTime)
+        {
+            transform.parent.GetComponent<Enemy>().onFire = false;
+            Destroy(gameObject);
+        }
 
-	void Start () 
-	{
-		spawnTime = Time.time;
-		MainCam = GameObject.FindWithTag ("GameController").GetComponent<GameManager> ().MainCam;
-	}
-
-	void Update () 
-	{
-		if (Time.time - spawnTime > lifeTime) 
-		{
-			transform.parent.GetComponent<Enemy> ().onFire = false;
-			Destroy (gameObject);
-		}
-
-		transform.LookAt (MainCam.transform);
-
-	}
+        transform.LookAt(GameManager.singleton.MainCam.transform);
+    }
 }

@@ -1,29 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Ice : MonoBehaviour {
+public class Ice : MonoBehaviour
+{
+    public float lifeTime;
+    private float spawnTime;
 
-	public float lifeTime;
-	private float spawnTime;
-	private GameObject MainCam;
+    void Start()
+    {
+        spawnTime = Time.time;
+    }
 
-	void Start () 
-	{
-		spawnTime = Time.time;
-		MainCam = GameObject.FindWithTag ("GameController").GetComponent<GameManager> ().MainCam;
-	}
+    void Update()
+    {
+        if (Time.time - spawnTime > lifeTime)
+        {
+            transform.parent.GetComponent<Enemy>().slowDown = false;
+            transform.parent.GetComponent<UnityEngine.AI.NavMeshAgent>().speed *= (1f / .4f);
+            Destroy(gameObject);
+        }
 
-	void Update () 
-	{
-		if (Time.time - spawnTime > lifeTime) 
-		{
-			transform.parent.GetComponent<Enemy> ().slowDown = false;
-			transform.parent.GetComponent<UnityEngine.AI.NavMeshAgent> ().speed *= (1f/.4f);
-			Destroy (gameObject);
-		}
-
-
-		transform.LookAt (MainCam.transform);
-
-	}
+        transform.LookAt(GameManager.singleton.MainCam.transform);
+    }
 }

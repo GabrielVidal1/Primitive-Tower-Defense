@@ -1,149 +1,140 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour 
+public class GameManager : MonoBehaviour
 {
+    #region Singleton
 
-	public float money;
+    public static GameManager singleton;
 
+    private void Awake()
+    {
+        if (singleton == null)
+            singleton = this;
+        else if (singleton == this)
+            Destroy(gameObject);
+    }
 
-	public Scene MainScene;
+    #endregion
 
+    public float money;
 
-	public float unitsPerLife;
-	public float bulletLifeTime;
-	public float delayBetweenTwoWaves;
-	public float respawnDelay;
+    public Scene MainScene;
 
-	public Vector3 camRelativePos;
-	public Vector3 camRelativeRot;
+    public float unitsPerLife;
+    public float bulletLifeTime;
+    public float delayBetweenTwoWaves;
+    public float respawnDelay;
+
+    public Vector3 camRelativePos;
+    public Vector3 camRelativeRot;
 
     public Material lifeBarMaterial;
-	public Material ArmorBarMaterial;
+    public Material ArmorBarMaterial;
 
-	public GameObject MainCam;
+    public GameObject MainCam;
 
-	public GameObject ArcheryTowerPrefab;
-	public GameObject ArcheryTowerPrefabVisualisation;
-	public float ArcheryTowerCost;
+    public GameObject ArcheryTowerPrefab;
+    public GameObject ArcheryTowerPrefabVisualisation;
+    public float ArcheryTowerCost;
 
-	public GameObject CanonTowerPrefab;
-	public GameObject CanonTowerPrefabVisualisation;
-	public float CanonTowerCost;
+    public GameObject CanonTowerPrefab;
+    public GameObject CanonTowerPrefabVisualisation;
+    public float CanonTowerCost;
 
-	public GameObject FireTowerPrefab;
-	public GameObject FireTowerPrefabVisualisation;
-	public float FireTowerCost;
+    public GameObject FireTowerPrefab;
+    public GameObject FireTowerPrefabVisualisation;
+    public float FireTowerCost;
 
-	public GameObject IceTowerPrefab;
-	public GameObject IceTowerPrefabVisualisation;
-	public float IceTowerCost;
+    public GameObject IceTowerPrefab;
+    public GameObject IceTowerPrefabVisualisation;
+    public float IceTowerCost;
 
-	public GameObject LightningTowerPrefab;
-	public GameObject LightningTowerPrefabVisualisation;
-	public float LightningTowerCost;
+    public GameObject LightningTowerPrefab;
+    public GameObject LightningTowerPrefabVisualisation;
+    public float LightningTowerCost;
 
-	public GameObject PoisonTowerPrefab;
-	public GameObject PoisonTowerPrefabVisualisation;
-	public float PoisonTowerCost;
+    public GameObject PoisonTowerPrefab;
+    public GameObject PoisonTowerPrefabVisualisation;
+    public float PoisonTowerCost;
 
-	public GameObject MachinGunTowerPrefab;
-	public GameObject MachinGunTowerPrefabVisualisation;
-	public float MachinGunTowerCost;
+    public GameObject MachinGunTowerPrefab;
+    public GameObject MachinGunTowerPrefabVisualisation;
+    public float MachinGunTowerCost;
 
-	public GameObject DestroyTowerVisualisation;
-
+    public GameObject DestroyTowerVisualisation;
 
 
     public GameObject bulletPrefab;
-	public GameObject gunSbirePrefab;
+    public GameObject gunSbirePrefab;
 
-	public Transform Nexus;
-
-
-	public Slider nexusLifeBar;
-	public float nexusLife = 10f;
-	private float initialNexusLife;
-
-	public GameObject perduButton;
+    public Transform Nexus;
 
 
-	public float wave;
+    public Slider nexusLifeBar;
+    public float nexusLife = 10f;
+    private float initialNexusLife;
+
+    public GameObject perduButton;
 
 
-	void Start()
-	{
-		initialNexusLife = nexusLife;
-
-		AudioListener.volume = .1f;
-
-	}
+    public float wave;
 
 
+    void Start()
+    {
+        initialNexusLife = nexusLife;
+
+        AudioListener.volume = .1f;
+    }
 
 
+    void Update()
+    {
+        Collider[] entities = Physics.OverlapSphere(transform.position, 2);
+
+        foreach (Collider entity in entities)
+        {
+            if (entity.tag == "Entity")
+            {
+                nexusLife--;
+                nexusLifeBar.GetComponent<Slider>().value = (nexusLife / initialNexusLife);
+                Destroy(entity.gameObject);
+            }
+        }
 
 
+        if (nexusLife <= 0)
+        {
+            perduButton.SetActive(true);
+            Time.timeScale = 0.05f;
+        }
 
 
-	void Update() 
-	{
-
-		Collider[] entities = Physics.OverlapSphere(transform.position, 2);
-
-		foreach (Collider entity in entities)
-		{
-			if (entity.tag == "Entity")
-			{
-				
-				nexusLife--;
-				nexusLifeBar.GetComponent<Slider> ().value = (nexusLife / initialNexusLife);
-				Destroy (entity.gameObject);
-			}
-		}
+        if (wave >= 30f)
+        {
+            print("coucou");
+            GameObject.FindWithTag("Canvas").GetComponent<MainCanvas>().ToggleWinMenu();
+        }
+    }
 
 
-		if (nexusLife <= 0) 
-		{
-			perduButton.SetActive (true);
-			Time.timeScale = 0.05f;
-		}
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(MainScene.name);
+    }
 
 
-		if (wave >= 30f) 
-		{
-			print ("coucou");
-			GameObject.FindWithTag ("Canvas").GetComponent<MainCanvas> ().ToggleWinMenu ();
-		}
-
-
-
-
-
-	}
-		
-
-
-	public void Quit ()
-	{
-		Application.Quit ();
-	}
-
-	public void Restart()
-	{
-		SceneManager.LoadScene (MainScene.name);
-	}
-
-
-	public void NextWave()
-	{
-		wave++;
-	}
-
-
-
-
-		
+    public void NextWave()
+    {
+        wave++;
+    }
 }

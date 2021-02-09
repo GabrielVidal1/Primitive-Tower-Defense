@@ -2,18 +2,18 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class Turret : MonoBehaviour {
+public class Turret : MonoBehaviour
+{
+    public bool classicTurret;
 
-	public bool classicTurret;
-
-	void Update ()
+    void Update()
     {
-		if (classicTurret) {
-			AimingSystem aM = GetComponent<AimingSystem> ();
-        
-			if (aM.ClosestEnemy () != null)
-				aM.SummonBullet ();
-		}
+        if (classicTurret)
+        {
+            AimingSystem aM = GetComponent<AimingSystem>();
 
+            if (aM.ClosestEnemy() != null)
+                aM.SummonBullet();
+        }
     }
 }

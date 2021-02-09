@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AimingSystem : MonoBehaviour {
-
+public class AimingSystem : MonoBehaviour
+{
     public GameObject pivot;
     public Transform bulletSpawn;
 
@@ -10,41 +10,30 @@ public class AimingSystem : MonoBehaviour {
     public float radius;
     public float bulletSpeed;
     public float bulletDamage;
-	public string team;
+    public string team;
 
     public float delayBetweenShots;
 
     private float lastShotTime = 0f;
-    private GameObject bulletPrefab;
     public Transform target;
 
-	void Start ()
+    public Transform ClosestEnemy()
     {
-        GameManager gM = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
-        bulletPrefab = gM.bulletPrefab;
-
-	}
-	
-	public Transform ClosestEnemy ()
-    {
-		Collider[] entities = Physics.OverlapSphere(transform.position, radius);
+        Collider[] entities = Physics.OverlapSphere(transform.position, radius);
         float minDistance = Mathf.Infinity;
         float distance;
-        
-		target = null;
+
+        target = null;
 
         foreach (Collider entity in entities)
         {
-            if (entity.tag == "Entity")
+            if (entity.CompareTag("Entity"))
             {
-                if (entity.GetComponent<TeamSystem>().team != team)
+                distance = Vector3.Distance(transform.position, entity.transform.position);
+                if (distance < minDistance)
                 {
-                    distance = Vector3.Distance(transform.position, entity.transform.position);
-                    if (distance < minDistance)
-                    {
-                        minDistance = distance;
-						target = entity.gameObject.transform;
-                    }
+                    minDistance = distance;
+                    target = entity.gameObject.transform;
                 }
             }
         }
@@ -52,7 +41,7 @@ public class AimingSystem : MonoBehaviour {
         if (target == null)
             return null;
 
-		pivot.transform.LookAt( new Vector3(target.position.x, .7f, target.position.z ));
+        pivot.transform.LookAt(new Vector3(target.position.x, .7f, target.position.z));
         return target;
     }
 
@@ -61,21 +50,17 @@ public class AimingSystem : MonoBehaviour {
     {
         if (Time.time - lastShotTime > delayBetweenShots && target != null)
         {
-
-            GameObject bullet = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
+            GameObject bullet = (GameObject) Instantiate(GameManager.singleton.bulletPrefab, bulletSpawn.position, Quaternion.identity);
             bullet.transform.localScale *= bulletDamage;
-			Vector3 dir = new Vector3( target.position.x, .2f, target.position.z ) - bulletSpawn.position;
+            Vector3 dir = new Vector3(target.position.x, .2f, target.position.z) - bulletSpawn.position;
             bullet.GetComponent<Rigidbody>().AddForce(dir.normalized * bulletSpeed);
             bullet.AddComponent<Bullet>();
-            bullet.GetComponent<Bullet>().TEAM = team;
             bullet.GetComponent<Bullet>().damage = bulletDamage;
-            bullet.GetComponent<Bullet>().Shooter = gameObject;
             lastShotTime = Time.time;
-			GetComponent<AudioSource> ().Play ();
+            GetComponent<AudioSource>().Play();
             return bullet;
         }
         else
             return null;
     }
 }
-
